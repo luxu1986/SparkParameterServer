@@ -1,0 +1,220 @@
+# Distributed PyTorch Training Configuration
+# Configuration file for training large-scale models with embedding tables on Spark
+
+# Model Configuration
+model:
+  input_dim: 100  # Dense feature dimension
+  hidden_dims: [512, 256, 128]  # Hidden layer dimensions
+  output_dim: 1  # Output dimension (1 for regression, num_classes for classification)
+  dropout: 0.1  # Dropout probability
+  activation: "relu"  # Activation function: relu, tanh, sigmoid, leaky_relu, gelu
+
+# Embedding Configuration
+embedding:
+  embedding_dim: 64  # Dimension of embedding vectors
+  max_features: 1000000  # Maximum number of unique categorical features
+  init_std: 0.1  # Standard deviation for embedding initialization
+
+# Training Configuration
+training:
+  num_epochs: 10  # Number of training epochs
+  batch_size: 1024  # Batch size per partition
+  learning_rate: 0.001  # Learning rate for optimization
+  loss_function: "mse"  # Loss function: mse, cross_entropy, binary_cross_entropy, l1
+  num_partitions: null  # Number of data partitions (null for auto)
+  checkpoint_interval: 5  # Save checkpoint every N epochs
+
+# Parameter Server Configuration
+parameter_server:
+  driver_port: 5000  # Port for driver parameter server
+  worker_port_base: 5001  # Base port for worker parameter servers (worker_i uses port_base + i)
+  timeout: 30.0  # Request timeout in seconds
+  max_retries: 3  # Maximum number of retries for failed requests
+
+# Spark Configuration
+spark:
+  app_name: "DistributedPyTorchTraining"
+  log_level: "WARN"  # Spark log level
+  
+  # Spark SQL settings
+  adaptive_enabled: true
+  adaptive_coalesce: true
+  arrow_enabled: true
+  arrow_max_records: 10000
+  
+  # Fault tolerance
+  task_max_failures: 3
+  stage_max_attempts: 8
+  
+  # Memory settings (adjust based on your cluster)
+  executor_memory: "4g"
+  driver_memory: "2g"
+  executor_cores: 2
+  
+  # Serialization
+  serializer: "org.apache.spark.serializer.KryoSerializer"
+
+# Data Configuration
+data:
+  # Expected data schema - adjust based on your data
+  features_column: "features"  # Column name for dense features
+  target_column: "target"  # Column name for target variable
+  categorical_column: "categorical_features"  # Column name for categorical feature IDs
+  
+  # Data preprocessing
+  shuffle_data: true  # Shuffle data at the beginning of each epoch
+  cache_data: false  # Cache data in memory (use for small datasets)
+
+# Optimization Configuration
+optimization:
+  optimizer: "sgd"  # Optimizer type: sgd, adam, rmsprop
+  momentum: 0.9  # Momentum for SGD
+  weight_decay: 0.0001  # L2 regularization
+  
+  # Learning rate scheduling
+  lr_scheduler: null  # Learning rate scheduler: step, exponential, cosine, null
+  lr_step_size: 10  # Step size for step scheduler
+  lr_gamma: 0.1  # Decay factor for step scheduler
+
+# Logging and Monitoring
+logging:
+  level: "INFO"  # Logging level: DEBUG, INFO, WARNING, ERROR
+  log_metrics: true  # Log training metrics
+  log_interval: 100  # Log every N batches
+  
+  # Metrics to track
+  metrics:
+    - "loss"
+    - "accuracy"  # Only for classification
+    - "mae"  # Mean absolute error
+    - "mse"  # Mean squared error
+
+# Checkpointing and Model Saving
+checkpointing:
+  enabled: true
+  checkpoint_dir: "./checkpoints"  # Directory to save checkpoints
+  save_best_only: false  # Save only the best model based on validation metric
+  save_interval: 5  # Save checkpoint every N epochs
+  max_checkpoints: 3  # Maximum number of checkpoints to keep
+
+# Fault Tolerance and Recovery
+fault_tolerance:
+  max_retries: 3  # Maximum retries for failed operations
+  retry_delay: 5  # Delay between retries (seconds)
+  health_check_interval: 30  # Health check interval (seconds)
+  
+  # Parameter server recovery
+  ps_recovery_enabled: true
+  ps_checkpoint_interval: 10  # Checkpoint PS state every N epochs
+
+# Performance Tuning
+performance:
+  # Threading
+  num_threads: 1  # Number of threads per worker (1 recommended for distributed training)
+  
+  # Memory management
+  gc_interval: 100  # Garbage collection interval (batches)
+  
+  # Network optimization
+  connection_pool_size: 10  # HTTP connection pool size
+  request_timeout: 30  # HTTP request timeout
+  
+  # Batch processing
+  prefetch_batches: 2  # Number of batches to prefetch
+  async_updates: false  # Enable asynchronous parameter updates
+
+# Model Architecture Variants
+# Uncomment and modify to use different architectures
+
+# # DeepFM Configuration
+# deepfm:
+#   dense_dim: 100
+#   embedding_dim: 64
+#   hidden_dims: [400, 400, 400]
+#   output_dim: 1
+#   dropout: 0.1
+
+# # Wide & Deep Configuration
+# wide_deep:
+#   wide_dim: 50  # Dimension of wide part
+#   deep_dims: [512, 256, 128]  # Deep part dimensions
+#   embedding_dim: 64
+#   output_dim: 1
+
+# Validation Configuration (if validation data is available)
+validation:
+  enabled: false  # Enable validation during training
+  validation_split: 0.2  # Fraction of data to use for validation
+  validation_interval: 1  # Validate every N epochs
+  early_stopping:
+    enabled: false
+    patience: 5  # Number of epochs to wait for improvement
+    min_delta: 0.001  # Minimum change to qualify as improvement
+
+# Advanced Features
+advanced:
+  # Gradient clipping
+  gradient_clipping:
+    enabled: false
+    max_norm: 1.0  # Maximum gradient norm
+  
+  # Mixed precision training
+  mixed_precision:
+    enabled: false  # Requires CUDA
+    loss_scale: "dynamic"  # Loss scaling: dynamic or float value
+  
+  # Model compression
+  compression:
+    enabled: false
+    method: "quantization"  # quantization, pruning
+    quantization_bits: 8
+
+# Environment Configuration
+environment:
+  # Python environment
+  python_path: null  # Additional Python path entries
+  
+  # CUDA settings
+  cuda_visible_devices: null  # GPU devices to use (null for all)
+  
+  # Additional environment variables
+  env_vars:
+    OMP_NUM_THREADS: "1"
+    MKL_NUM_THREADS: "1"
+    NUMEXPR_NUM_THREADS: "1"
+
+# Debugging and Development
+debug:
+  enabled: false  # Enable debug mode
+  profile_training: false  # Profile training performance
+  save_gradients: false  # Save gradients for analysis
+  verbose_logging: false  # Enable verbose logging
+
+# Example configurations for different use cases:
+
+# # Small dataset configuration
+# small_dataset:
+#   training:
+#     batch_size: 256
+#     num_epochs: 50
+#   spark:
+#     executor_memory: "2g"
+#     driver_memory: "1g"
+
+# # Large dataset configuration  
+# large_dataset:
+#   training:
+#     batch_size: 2048
+#     num_epochs: 5
+#   spark:
+#     executor_memory: "8g"
+#     driver_memory: "4g"
+#     executor_cores: 4
+
+# # GPU-enabled configuration
+# gpu_config:
+#   advanced:
+#     mixed_precision:
+#       enabled: true
+#   environment:
+#     cuda_visible_devices: "0,1,2,3" 
