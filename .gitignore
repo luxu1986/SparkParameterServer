@@ -1,0 +1,185 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# PySpark / Spark
+spark-warehouse/
+derby.log
+metastore_db/
+
+# TensorFlow
+*.h5
+*.hdf5
+*.pb
+*.ckpt
+*.ckpt.*
+checkpoint
+logs/
+tensorboard_logs/
+
+# Model checkpoints and data
+checkpoints/
+models/
+data/
+*.parquet
+*.npz
+*.npy
+
+# Logs
+*.log
+logs/
+
+# Local testing files
+/tmp/
+*.tmp
+
+# AWS credentials (never commit!)
+.aws/
+credentials
+*.pem
+
+# Local configuration overrides
+local_config.py
+local_settings.py
+*.local.py
+
+# Secrets and environment files
+.env
+.env.*
+secrets.yaml
+secrets.json
+
+# Compressed files (may contain sensitive data)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Profiling data
+*.prof
+*.lprof
+
